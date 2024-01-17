@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd" version="4.0">
+  <display-name>och01</display-name>
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>index.htm</welcome-file>
+    <welcome-file>default.html</welcome-file>
+    <welcome-file>default.jsp</welcome-file>
+    <welcome-file>default.htm</welcome-file>
+  </welcome-file-list>
+  <servlet>
+    <description></description>
+    <display-name>Add3</display-name>
+    <servlet-name>Add3</servlet-name>
+    <servlet-class>och01.Add3</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Add3</servlet-name>
+    <url-pattern>/Add3</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>GuGu</display-name>
+    <servlet-name>GuGu</servlet-name>
+    <servlet-class>och01.GuGu</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>GuGu</servlet-name>
+    <url-pattern>/GuGu</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>Board</display-name>
+    <servlet-name>Board</servlet-name>
+    <servlet-class>och01.Board</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Board</servlet-name>
+    <url-pattern>/Board</url-pattern>
+  </servlet-mapping>
+</web-app>

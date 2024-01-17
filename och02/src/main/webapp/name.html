@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script>
+	function chk(){
+		if(!frm.name.value){
+			alert("이름이 뭐예요?");
+			frm.name.focus();
+			return false;
+		}
+		if(!frm.addr.value){
+			alert("어디 사시나요?");
+			frm.addr.focus();
+			return false;
+		}
+		return true;
+	}
+</script>
+</head>
+<body>
+	<form action="Name" name="frm" onsubmit="return chk()">
+		이름 : <input type="text" name="name"><p>
+		주소 : <input type="text" name="addr"><p>
+		<input type="submit" value="입력완료">
+	</form>
+</body>
+</html>

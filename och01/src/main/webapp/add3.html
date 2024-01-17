@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript">
+	function chk() {
+		if(!frm.num.value){
+			alert("숫자 입력");
+			frm.num.focus();
+			return false;
+		}
+		if(isNaN(frm.num.value)){
+			alert('숫자가 아님');
+			frm.num.focus();
+			frm.num.value ='';
+			return false;
+		}
+		return true;
+	}
+	
+</script>
+</head>
+<body>
+	<h1>숫자를 입력하세요</h1>
+	<!--servlet에 Add3으로 아래 정보를 가지고 감-->
+	<form action="Add3" name="frm" onsubmit="return chk()" method="get">
+		<!-- 주석 ctrl+shf+/ -->
+		숫자 : <input type="text" name="num"><p>
+		위치 : <input type="text" name="loc"><p>
+				<input type="submit" value="확인">
+	</form>
+</body>
+</html>
