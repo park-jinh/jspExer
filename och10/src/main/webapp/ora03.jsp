@@ -12,25 +12,31 @@
 </head>
 <body>
 	<%
-		// Home Work 1
-		// 조건 1: deptno를 가지고 dept Table 조회 - createStatement
 		String deptno = request.getParameter("deptno");
 		String driver = "oracle.jdbc.driver.OracleDriver";
 		String url = "jdbc:oracle:thin:@localhost:1521:xe";
+		String sql = "select * from dept where deptno="+deptno;
 		Class.forName(driver);
-		Connection conn = DriverManager.getConnection(url, "scott","tiger");
-		String sql = "Select * from dept where deptno="+deptno;
+		Connection conn = DriverManager.getConnection(url, "scott", "tiger");
 		Statement stmt = conn.createStatement();
 		ResultSet rs = stmt.executeQuery(sql);
+		
 		if(rs.next()){
-			out.println("부서코드 : " + rs.getInt(1) +"<br>");
-			out.println("부서명 : " + rs.getString(2) +"<br>");
-			out.println("근무지 : " + rs.getString(3) +"<br>");
+			String dname = rs.getString("dname");
+			String loc = rs.getString(3);
+			out.println("부서코드 : "+deptno+"<p>");
+			out.println("부서명 : "+dname+"<p>");
+			out.println("근무지 : "+loc+"<p>");
+			request.setAttribute("deptno", deptno);
+			request.setAttribute("dname", dname);
+			request.setAttribute("loc", loc);
 		} else out.println("부서 없음");
 		rs.close();
 		stmt.close();
 		conn.close();
 		
+		RequestDispatcher rd = request.getRequestDispatcher("ora03Result.jsp");
+		rd.forward(request, response);
 	%>
 </body>
 </html>

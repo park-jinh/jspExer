@@ -1,8 +1,9 @@
+<%@page import="java.sql.ResultSet"%>
 <%@page import="java.sql.Statement"%>
 <%@page import="java.sql.DriverManager"%>
 <%@page import="java.sql.Connection"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8" errorPage="dbError.jsp"%>
+    pageEncoding="UTF-8" errorPage="dbError.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,22 +11,31 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<h2>스크립틀릿 + Statement 부서 삭제 Hw2</h2>
 	<%
 		String deptno = request.getParameter("deptno");
 		String driver = "oracle.jdbc.driver.OracleDriver";
 		String url = "jdbc:oracle:thin:@localhost:1521:xe";
+		String sql = "select * from dept where deptno=" + deptno;
 		Class.forName(driver);
 		Connection conn = DriverManager.getConnection(url, "scott","tiger");
-		String sql = "Delete from dept where deptno="+deptno;
 		Statement stmt = conn.createStatement();
-		int result = stmt.executeUpdate(sql);
-		if(result>0)
-			out.println(result+"개의 데이터가 정상적으로 삭제되었습니다.<br>");
-		else
-			out.println("삭제에 실패했습니다.<br>");
+		ResultSet rs = stmt.executeQuery(sql);
+		if(rs.next()){
+			request.setAttribute("deptno", deptno);
+			request.setAttribute("dname", rs.getString(2));
+			request.setAttribute("loc", rs.getString(3));
+			rs.close();
+			stmt.close();
+			conn.close();
+			RequestDispatcher rd = request.getRequestDispatcher("oraResult.jsp");
+			rd.forward(request, response);
+		}
 		stmt.close();
 		conn.close();
 	%>
+	<script type="text/javascript">
+		alert("없는 부서");
+		location.href = "oraUpdate.html";
+	</script>
 </body>
 </html>

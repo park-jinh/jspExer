@@ -16,7 +16,7 @@
 	<%
 		String deptno = request.getParameter("deptno");
 		String driver = "oracle.jdbc.driver.OracleDriver";
-		String url = "jdbc:oracle:thin:@172.30.1.78:1521:xe";
+		String url = "jdbc:oracle:thin:@localhost:1521:xe";
 		String sql = "select * from dept where deptno="+deptno;
 		Class.forName(driver);
 		Connection conn = DriverManager.getConnection(url, "scott", "tiger");
