@@ -162,15 +162,12 @@ public class MemberDao {
 			ResultSet rs = null;
 			String sql = " select passwd from member2 where id = ? ";
 			try {
-				if(result == 1) {
-					sql = "delete from member2 where id = ?";
-					conn = getConnection();
-					pstmt = conn.prepareStatement(sql);
-					pstmt.setString(1, id);
-					int resultNum = pstmt.executeUpdate();
-					if(resultNum==0)
-						throw new SQLException();
-				}
+				sql = "delete from member2 where id = ?";
+				conn = getConnection();
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, id);
+				if(pstmt.executeUpdate()==0)
+					throw new SQLException();
 			} catch(Exception e) {
 				e.printStackTrace();
 			} finally {
