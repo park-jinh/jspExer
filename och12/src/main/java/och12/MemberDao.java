@@ -4,12 +4,15 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
-// singleton + DBCP -> 메모리 절감 +DDos 공격 예방
+// singleton + DBCP -> 메모리 절감 +DDos(Distributed Denial of Service) 공격 예방
 public class MemberDao {
 	private static MemberDao instance;
 	
@@ -52,9 +55,9 @@ public class MemberDao {
 			if(rs.getString(1).equals(passwd))
 				result++;
 		}
-		rs.close();
-		pstmt.close();
-		conn.close();
+		if(rs != null) rs.close();
+		if(pstmt != null) pstmt.close();
+		if(conn != null) conn.close();
 		
 		return result;
 	}
@@ -70,8 +73,118 @@ public class MemberDao {
 		pstmt.setString(5, member2.getTel());
 		//pstmt.setDate(6, new java.sql.Date((new java.util.Date()).getTime())); // util Date 타입을 sql Date타입으로 변경 방법
  		int result = pstmt.executeUpdate();
-		pstmt.close();
-		conn.close();
+ 		if(pstmt != null) pstmt.close();
+ 		if(conn != null) conn.close();
 		return result;
 	}
+	
+	public List<Member2> list() throws SQLException{
+		List<Member2> list = new ArrayList<Member2>();
+		Connection conn = getConnection();
+		String sql = " select * from member2";
+		Statement stmt = conn.createStatement();
+		ResultSet rs = stmt.executeQuery(sql);
+		while(rs.next()) {
+			Member2 member2 = new Member2();
+			member2.setId(rs.getString(1));
+			member2.setPasswd(rs.getString(2));
+			member2.setName(rs.getString(3));
+			member2.setAddress(rs.getString(4));
+			member2.setTel(rs.getString(5));
+			member2.setReg_date(rs.getDate(6));
+			list.add(member2);
+		}
+		if(rs != null) rs.close();
+		if(stmt != null) stmt.close();
+		if(conn != null) conn.close();
+		return list;
+	}
+	
+	public Member2 select(String id) throws SQLException{
+		Member2 member2 = new Member2();
+		Connection conn =null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		try {
+			conn = getConnection();
+			String sql = "select * from member2 where id=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, id);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				member2.setId(id);
+				member2.setPasswd(rs.getString(2));
+				member2.setName(rs.getString(3));
+				member2.setAddress(rs.getString(4));
+				member2.setTel(rs.getString(5));
+				member2.setReg_date(rs.getDate(6));
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(rs != null) rs.close();
+			if(pstmt != null) pstmt.close();
+			if(conn != null) conn.close();
+		}
+		return member2;
+	}
+	
+	public int confirm(String id) throws SQLException{
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		int result = 0;
+		String sql = " select id from member2 where id = ? ";
+		try {
+			conn = getConnection();
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, id);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				result++;
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(rs!=null) rs.close();
+			if(pstmt!=null) pstmt.close();
+			if(conn!=null) conn.close();
+		}
+		
+		return result;
+	}
+	
+	public int delete(String id, String pw) throws SQLException{
+		int result = check(id, pw);
+		if(result==1) {
+			Connection conn = null;
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			String sql = " select passwd from member2 where id = ? ";
+			try {
+				if(result == 1) {
+					sql = "delete from member2 where id = ?";
+					conn = getConnection();
+					pstmt = conn.prepareStatement(sql);
+					pstmt.setString(1, id);
+					int resultNum = pstmt.executeUpdate();
+					if(resultNum==0)
+						throw new SQLException();
+				}
+			} catch(Exception e) {
+				e.printStackTrace();
+			} finally {
+				if(rs!=null) rs.close();
+				if(pstmt!=null) pstmt.close();
+				if(conn!=null) conn.close();
+			}
+		}
+		return result;
+		
+		
+		
+		
+		
+	}
+	
 }
