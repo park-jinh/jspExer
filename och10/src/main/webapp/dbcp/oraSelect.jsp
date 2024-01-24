@@ -33,9 +33,14 @@
 			emp.setHiredate(rs.getDate(4));
 		// 3. oraResult.jsp 이동
 			request.setAttribute("emp", emp);
+			rs.close();
+			stmt.close();
+			conn.close();
 			RequestDispatcher rd = request.getRequestDispatcher("oraResult.jsp");
 			rd.forward(request, response);
 		}
+		stmt.close();
+		conn.close();
 	%>
 	<script type="text/javascript">
 		alert("해당 자료 없음");

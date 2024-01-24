@@ -36,6 +36,9 @@
 		System.out.println(emp.getEmpno()+", "+emp.getEname());
 	}
 	pageContext.setAttribute("al", al);
+	rs.close();
+	stmt.close();
+	conn.close();
 %>
 	<h2>보고싶은 사원 번호를 선택하세요</h2>
 	<form action="oraCallEmpInfo.jsp">
