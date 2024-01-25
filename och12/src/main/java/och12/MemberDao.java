@@ -156,31 +156,50 @@ public class MemberDao {
 	
 	public int delete(String id, String pw) throws SQLException{
 		int result = check(id, pw);
-		if(result==1) {
-			Connection conn = null;
-			PreparedStatement pstmt = null;
-			ResultSet rs = null;
-			String sql = "delete from member2 where id = ?";
-			try {
-				conn = getConnection();
-				pstmt = conn.prepareStatement(sql);
-				pstmt.setString(1, id);
-				if(pstmt.executeUpdate()==0)
-					throw new SQLException();
-			} catch(Exception e) {
-				e.printStackTrace();
-			} finally {
-				if(rs!=null) rs.close();
-				if(pstmt!=null) pstmt.close();
-				if(conn!=null) conn.close();
-			}
+		
+		if(result !=1 ) return result;
+		
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = "delete from member2 where id = ?";
+		try {
+			conn = getConnection();
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, id);
+			if(pstmt.executeUpdate()==0)
+				throw new SQLException();
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(rs!=null) rs.close();
+			if(pstmt!=null) pstmt.close();
+			if(conn!=null) conn.close();
 		}
 		return result;
-		
-		
-		
-		
-		
+	}
+	
+	public int update(Member2 member) throws SQLException {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		int result=0;
+		String sql = "update member2 set passwd=?, name=?, address=?, tel=? where id=?";
+		try {
+			conn = getConnection();
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, member.getPasswd());
+			pstmt.setString(2, member.getName());
+			pstmt.setString(3, member.getAddress());
+			pstmt.setString(4, member.getTel());
+			pstmt.setString(5, member.getId());
+			result = pstmt.executeUpdate();
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(pstmt != null) pstmt.close();
+			if(conn != null) conn.close();
+		}
+		return result;
 	}
 	
 }

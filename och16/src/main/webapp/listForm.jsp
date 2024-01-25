@@ -32,10 +32,10 @@
 					<td>${startNum }</td>
 					<td class="left" width="200">
 						<c:if test="${board.readcount > 20}">
-							<img src="images/hot.jif" onmouseover="getDeptName(${board.num})">
+							<img src="images/hot.gif" onmouseover="getDeptName(${board.num})">
 						</c:if>
 						<c:if test="${board.re_level > 0 }">
-							<img src="images/level.jif" width="${board.re_level*10 }">
+							<img src="images/level.gif" width="${board.re_level*10 }">
 							<img src="images/re.gif">
 						</c:if>
 						<a href="content.do?num=${board.num }&pageNum=${currentPage}">${board.subject }</a>
