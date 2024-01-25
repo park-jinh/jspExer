@@ -160,9 +160,8 @@ public class MemberDao {
 			Connection conn = null;
 			PreparedStatement pstmt = null;
 			ResultSet rs = null;
-			String sql = " select passwd from member2 where id = ? ";
+			String sql = "delete from member2 where id = ?";
 			try {
-				sql = "delete from member2 where id = ?";
 				conn = getConnection();
 				pstmt = conn.prepareStatement(sql);
 				pstmt.setString(1, id);
