@@ -106,7 +106,8 @@ public class BoardDao {
 	public void readCount(int num) throws SQLException{
 		Connection conn = null;
 		Statement stmt = null;
-		String sql = "update board set readcount = (select readcount from board where num="+num+")+1 where num="+num;
+		//String sql = "update board set readcount = (select readcount from board where num="+num+")+1 where num="+num;
+		String sql = "update board set readcount = readcount+1 where num="+num;
 		try {
 			conn = getConnection();
 			stmt = conn.createStatement();
@@ -156,6 +157,46 @@ public class BoardDao {
 		}
 		
 		return board;
+	}
+
+	public int update(Board board) throws SQLException{
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		String sql = "update board set writer=?, email=?, subject=?, passwd=?, content=?, ip=? where num = ?";
+		int result=0;
+		try {
+			conn = getConnection();
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, board.getWriter());
+			pstmt.setString(2, board.getEmail());
+			pstmt.setString(3, board.getSubject());
+			pstmt.setString(4, board.getPasswd());
+			pstmt.setString(5, board.getContent());
+			pstmt.setString(6, board.getIp());
+			pstmt.setInt(7,board.getNum());
+			result = pstmt.executeUpdate();
+		}catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(pstmt != null) pstmt.close();
+			if(conn != null) conn.close();
+		}
+		
+		return result;
+	}
+
+	public int insert(Board board) throws SQLException{
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		String sql = "";
+		try {
+			conn = getConnection();
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return 0;
 	}
 	
 	
