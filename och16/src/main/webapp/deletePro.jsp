@@ -10,16 +10,15 @@
 <body>
 <c:if test="${result > 0 }">
 	<script type="text/javascript">
-		alert("입력 완료 ^^");  
+		alert("삭제 완료!");
 		location.href="list.do?pageNum=${pageNum}";
 	</script>
 </c:if>
-<c:if test="${result == 0 }">  
+<c:if test="${result == 0 }">
 	<script type="text/javascript">
-		alert("오류야 T.T");  
-		location.href="writeForm.do?num=${num}&pageNum=${pageNum}";
+		alert("헐 암호 틀려");
+		location.href="deleteForm.do?num=${num}&pageNum=${pageNum}";
 	</script>
 </c:if>
-
 </body>
 </html>

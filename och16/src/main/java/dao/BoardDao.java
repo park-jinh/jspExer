@@ -186,18 +186,109 @@ public class BoardDao {
 	}
 
 	public int insert(Board board) throws SQLException{
+		int num = board.getNum();
 		Connection conn = null;
 		PreparedStatement pstmt = null;
-		String sql = "";
+		int result = 0;
+		ResultSet rs = null;
+		String sql1 = "select nvl(max(num),0) from board";
+		String sql="insert into board values(?,?,?,?,?,?,?,?,?,?,?,sysdate)";
+		// 홍해의 기적
+		String sql2 = "update board set re_step = re_step+1 where ref=? and re_step > ?";
+		
 		try {
 			conn = getConnection();
+			pstmt = conn.prepareStatement(sql1);
+			rs = pstmt.executeQuery();
+			rs.next();
+			// key인 num 1씩 증가, mysql auto_increment 또는 oracle sequence
+			// sequence를 사용 : values(시퀀스명(board_seq).nextval,?,?...)
+			int number = rs.getInt(1) + 1;
+			rs.close();
+			pstmt.close();
 			
-		}catch (Exception e) {
+			// 댓글 ---> sql2
+			if(num !=0) {
+				System.out.println("BoardDao insert 댓글 sql2->"+sql2);
+				System.out.println("BoardDao insert 댓글 board.getRef()->"+board.getRef());
+				System.out.println("BoardDao insert 댓글 board.getRe_step()->"+board.getRe_step());
+				pstmt = conn.prepareStatement(sql2);
+				pstmt.setInt(1, board.getRef());
+				pstmt.setInt(2, board.getRe_step());
+				pstmt.executeUpdate();
+				pstmt.close();
+				
+				// 댓글 관련 정보
+				board.setRe_step(board.getRe_step()+1);
+				board.setRe_level(board.getRe_level()+1);
+			}
+			
+			if(num==0) board.setRef(number); // 신규글 일 때 num과 Ref 맞춰줌
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, number);
+			pstmt.setString(2, board.getWriter());
+			pstmt.setString(3, board.getSubject());
+			pstmt.setString(4, board.getContent());
+			pstmt.setString(5, board.getEmail());
+			pstmt.setInt(6, board.getReadcount());
+			pstmt.setString(7, board.getPasswd());
+			pstmt.setInt(8, board.getRef());
+			pstmt.setInt(9, board.getRe_step());
+			pstmt.setInt(10, board.getRe_level());
+			pstmt.setString(11, board.getIp());
+			result = pstmt.executeUpdate();
+			
+		} catch(Exception e) {
 			e.printStackTrace();
+		} finally {
+			if(pstmt != null) pstmt.close();
+			if(conn != null) conn.close();
 		}
 		
-		return 0;
+		/*
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		String sql = "insert into board VALUES ((select nvl(max(num),0)+1 from board),?,?,?,?,0,?,(select nvl(max(num),0)+1 from board),0,0,?,sysdate)";
+		int result = 0;
+		try {
+			conn = getConnection();
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, board.getWriter());
+			pstmt.setString(2, board.getSubject());
+			pstmt.setString(3, board.getContent());
+			pstmt.setString(4, board.getEmail());
+			pstmt.setString(5, board.getPasswd());
+			pstmt.setString(6, board.getIp());
+			result = pstmt.executeUpdate();
+		}catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(pstmt!=null) pstmt.close();
+			if(conn!=null) conn.close();
+		}
+		*/
+		return result;
 	}
-	
+
+	public int delete(int num, String passwd) throws SQLException{
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		String sql = "delete from board WHERE num=? and passwd=?";
+		int result = 0;
+		try {
+			conn = getConnection();
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, num);
+			pstmt.setString(2, passwd);
+			result = pstmt.executeUpdate();
+		}catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(pstmt!=null) pstmt.close();
+			if(conn!=null) conn.close();
+		}
+		return result;
+	}
+
 	
 }

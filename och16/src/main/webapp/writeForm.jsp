@@ -14,7 +14,6 @@
 		<input type="hidden" name="ref" value="${ref }">
 		<input type="hidden" name="re_level" value="${re_level }">
 		<input type="hidden" name="re_step" value="${re_step }">
-	</form>
 	<table>
 		<caption><h2>게시판 글쓰기</h2></caption>
 		<tr>
@@ -37,5 +36,6 @@
 		<tr><td><input type="submit" value="확인"></td>
 			<td><input type="reset" value="다시작성"></td></tr>
 	</table>
+	</form>
 </body>
 </html>

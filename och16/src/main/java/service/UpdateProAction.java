@@ -15,6 +15,7 @@ public class UpdateProAction implements CommandProcess {
 	public String requestPro(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		System.out.println("UpdateProAction service start...");
+		System.out.println(request.getAttribute("board"));
 		// 1. num , pageNum, writer ,  email , subject , passwd , content   Get
 		int num = Integer.parseInt(request.getParameter("num"));
 		int pageNum = Integer.parseInt(request.getParameter("pageNum"));

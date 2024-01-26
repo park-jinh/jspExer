@@ -2,6 +2,8 @@ package service;
 
 import java.io.IOException;
 
+import dao.Board;
+import dao.BoardDao;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -19,6 +21,14 @@ public class WriteFormAction implements CommandProcess {
 			String pageNum = request.getParameter("pageNum");
 			if(pageNum == null) pageNum = "1";
 			//댓글
+			if(request.getParameter("num") != null) {
+				num = Integer.parseInt(request.getParameter("num"));
+				BoardDao bd = BoardDao.getInstance();
+				Board board = bd.select(num);
+				ref = board.getRef();
+				re_level = board.getRe_level();
+				re_step = board.getRe_step();
+			}
 			
 			request.setAttribute("num", num);
 			request.setAttribute("ref", ref);
