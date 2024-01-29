@@ -185,6 +185,7 @@ public class BoardDao {
 		return result;
 	}
 
+	
 	public int insert(Board board) throws SQLException{
 		int num = board.getNum();
 		Connection conn = null;
